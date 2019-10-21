@@ -40,8 +40,7 @@ class S(BaseHTTPRequestHandler):
             bot.send_message("96171182",
                             f"Uusi hakemus!\n{data['topic_title']}")
         elif event == 'post_created':
-            data = data['topic']
-
+            data = data['post']
             bot.send_message("96171182",
                             f"""Uusi viesti ketjuun {data['topic_title']}!\n\n
                             https://vaalit.tietokilta.fi/t/{data['topic_slug']}/{data['topic_id']}""")
