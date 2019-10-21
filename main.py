@@ -6,12 +6,13 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 
 from constants import BOTTOKEN
 
+bot = telegram.Bot(BOTTOKEN)
+
 class S(BaseHTTPRequestHandler):
     def _set_headers(self):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
-        self.bot = telegram.Bot(BOTTOKEN)
 
 
     def _html(self, message):
@@ -30,8 +31,8 @@ class S(BaseHTTPRequestHandler):
 
     def do_POST(self):
         # Doesn't do anything with posted data
-        self.bot.send_message("96171182",
-                              "testest")
+        bot.send_message("96171182",
+                        "testest")
         self._set_headers()
         self.wfile.write(self._html("POST!"))
 
