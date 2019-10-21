@@ -8,6 +8,7 @@ import json
 from constants import BOTTOKEN
 
 bot = telegram.Bot(BOTTOKEN)
+chats = ['tietokilta','tietokila','tiklors']
 
 class S(BaseHTTPRequestHandler):
     def _set_headers(self):
@@ -37,12 +38,12 @@ class S(BaseHTTPRequestHandler):
         print(data)
         if event == 'topic_created':
             data = data['topic']
-            bot.send_message("96171182",
-                            f"""Uusi hakemus!\n{data['title']}""")
+            for c in chats:
+            bot.send_message(c, f"""Uusi hakemus!\n{data['title']}""")
         elif event == 'post_created':
             data = data['post']
-            bot.send_message("96171182",
-                            f"""Uusi viesti ketjuun {data['topic_title']}!\n\nhttps://vaalit.tietokilta.fi/t/{data['topic_slug']}/{data['topic_id']}""")
+            for c in chats:
+                bot.send_message(c, f"""Uusi viesti ketjuun {data['topic_title']}!\n\nhttps://vaalit.tietokilta.fi/t/{data['topic_slug']}/{data['topic_id']}""")
         self._set_headers()
         self.wfile.write(self._html("POST!"))
 
@@ -51,4 +52,5 @@ if __name__ == "__main__":
     httpd = HTTPServer(server_address, S)
     print(f"Starting httpd server on 0.0.0.0:4000")
     httpd.serve_forever()
+    print("serv?")
 
