@@ -36,11 +36,15 @@ class S(BaseHTTPRequestHandler):
         data = json.loads(self.rfile.read(int(self.headers.get('content-length'))))
         print(data)
         if event == 'topic_created':
+            data = data['topic']
             bot.send_message("96171182",
-                            "testest")
+                            f"Uusi hakemus!\n{data['topic_title']}")
         elif event == 'post_created':
+            data = data['topic']
+
             bot.send_message("96171182",
-                            "nenenenen")
+                            f"""Uusi viesti ketjuun {data['topic_title']}!\n\n
+                            https://vaalit.tietokilta.fi/t/{data['topic_slug']}/{data['topic_id']}""")
         self._set_headers()
         self.wfile.write(self._html("POST!"))
 
