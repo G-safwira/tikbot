@@ -33,7 +33,7 @@ class S(BaseHTTPRequestHandler):
     def do_POST(self):
         # Doesn't do anything with posted data
         event = self.headers.get('X-Discourse-Event')
-        data = json.loads(self.rfile.read(self.headers.get('content-length')))
+        data = json.loads(self.rfile.read(int(self.headers.get('content-length'))))
         print(data)
         if event == 'topic_created':
             bot.send_message("96171182",
