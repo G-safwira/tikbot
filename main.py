@@ -38,12 +38,11 @@ class S(BaseHTTPRequestHandler):
         if event == 'topic_created':
             data = data['topic']
             bot.send_message("96171182",
-                            f"Uusi hakemus!\n{data['topic_title']}")
+                            f"""Uusi hakemus!\n{data['title']}""")
         elif event == 'post_created':
             data = data['post']
             bot.send_message("96171182",
-                            f"""Uusi viesti ketjuun {data['topic_title']}!\n\n
-                            https://vaalit.tietokilta.fi/t/{data['topic_slug']}/{data['topic_id']}""")
+                            f"""Uusi viesti ketjuun {data['topic_title']}!\n\nhttps://vaalit.tietokilta.fi/t/{data['topic_slug']}/{data['topic_id']}""")
         self._set_headers()
         self.wfile.write(self._html("POST!"))
 
