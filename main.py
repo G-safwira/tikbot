@@ -39,7 +39,7 @@ class S(BaseHTTPRequestHandler):
         if event == 'topic_created':
             data = data['topic']
             for c in chats:
-            bot.send_message(c, f"""Uusi hakemus!\n{data['title']}""")
+                bot.send_message(c, f"""Uusi hakemus!\n{data['title']}""")
         elif event == 'post_created':
             data = data['post']
             for c in chats:
