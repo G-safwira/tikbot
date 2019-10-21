@@ -3,6 +3,7 @@
 import telegram
 import argparse
 from http.server import HTTPServer, BaseHTTPRequestHandler
+import json
 
 from constants import BOTTOKEN
 
@@ -31,8 +32,15 @@ class S(BaseHTTPRequestHandler):
 
     def do_POST(self):
         # Doesn't do anything with posted data
-        bot.send_message("96171182",
-                        "testest")
+        event = self.headers.get('X-Discourse-Event')
+        data = json.loads(self.rfile.read(self.headers.get('content-length')))
+        print(data)
+        if event == 'topic_created':
+            bot.send_message("96171182",
+                            "testest")
+        elif event == 'post_created':
+            bot.send_message("96171182",
+                            "nenenenen")
         self._set_headers()
         self.wfile.write(self._html("POST!"))
 
