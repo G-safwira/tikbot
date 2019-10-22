@@ -10,19 +10,20 @@ from telegram.ext import Updater, CommandHandler
 from constants import BOTTOKEN
 from messages import NEWCOMMENT, NEWTHREAD
 bot = telegram.Bot(BOTTOKEN)
-#chats = ['@tietokilta','@tietokila','@tiklors']
 
-with open('channels.json', 'r') as fp:
-    chats = json.load(fp)
+def load_chats():
+    with open('channels.json', 'r') as fp:
+        return json.load(fp)
 
-def save_channels():
+def save_channels(chats):
     with open('channels.json', 'w') as fp:
         json.dump(chats, fp)
 
 def start(update, context):
     """Send a message when the command /start is issued."""
+    chats = load_chats()
     chats.append( str( update.message.chat_id ) )
-    save_channels()
+    save_channels(chats)
     update.message.reply_text('Chat registered!')
 
 def help(update, context):
@@ -74,7 +75,8 @@ class S(BaseHTTPRequestHandler):
         self._set_headers()
 
     def do_POST(self):
-        chats = chats
+        chats = load_chats()
+
         save = False
         # Doesn't do anything with posted data
         event = self.headers.get('X-Discourse-Event')
@@ -99,7 +101,7 @@ class S(BaseHTTPRequestHandler):
                     save = True
             chats = nchats
         if save:
-            save_channels()
+            save_channels(chats)
         self._set_headers()
         self.wfile.write(self._html("POST!"))
 
