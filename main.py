@@ -9,7 +9,7 @@ from constants import BOTTOKEN
 from messages import NEWCOMMENT, NEWTHREAD
 bot = telegram.Bot(BOTTOKEN)
 #chats = ['@tietokilta','@tietokila','@tiklors']
-chats = ['96171182', '@Tietokila']
+chats = ['96171182', '@visantensti']
 
 class S(BaseHTTPRequestHandler):
     def _set_headers(self):
