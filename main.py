@@ -40,11 +40,11 @@ class S(BaseHTTPRequestHandler):
         if event == 'topic_created':
             data = data['topic']
             for c in chats:
-                bot.send_message(c, NEWTHREAD.format(data['title']) )
+                bot.send_message(c, NEWTHREAD.format(data['title']), parse_mode="Markdown" )
         elif event == 'post_created':
             data = data['post']
             for c in chats:
-                bot.send_message(c, NEWCOMMENT.format(data['topic_title'], data['topic_slug'], data['topic_id']))
+                bot.send_message(c, NEWCOMMENT.format(data['topic_title'], data['topic_slug'], data['topic_id']), parse_mode="Markdown")
         self._set_headers()
         self.wfile.write(self._html("POST!"))
 
