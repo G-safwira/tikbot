@@ -6,7 +6,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 
 from constants import BOTTOKEN
-from messages.py import NEWCOMMENT, NEWTHREAD
+from messages import NEWCOMMENT, NEWTHREAD
 bot = telegram.Bot(BOTTOKEN)
 chats = ['tietokilta','tietokila','tiklors']
 
