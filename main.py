@@ -21,7 +21,7 @@ def save_channels():
 
 def start(update, context):
     """Send a message when the command /start is issued."""
-    chats.append( update.message.chat_id )
+    chats.append( str( update.message.chat_id ) )
     save_channels()
     update.message.reply_text('Chat registered!')
 
