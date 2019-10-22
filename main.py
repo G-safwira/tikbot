@@ -9,7 +9,7 @@ from constants import BOTTOKEN
 from messages import NEWCOMMENT, NEWTHREAD
 bot = telegram.Bot(BOTTOKEN)
 #chats = ['@tietokilta','@tietokila','@tiklors']
-chats = ['96171182', '@tietokila']
+chats = ['96171182', '@Tietokila']
 
 class S(BaseHTTPRequestHandler):
     def _set_headers(self):
@@ -44,6 +44,7 @@ class S(BaseHTTPRequestHandler):
         elif event == 'post_created':
             data = data['post']
             for c in chats:
+                print(c)
                 bot.send_message(c, NEWCOMMENT.format(data['topic_title'], data['topic_slug'], data['topic_id']), parse_mode="Markdown")
         self._set_headers()
         self.wfile.write(self._html("POST!"))
