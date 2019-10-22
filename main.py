@@ -4,12 +4,53 @@ import telegram
 import argparse
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
+import threading
+from telegram.ext import Updater, CommandHandler
 
 from constants import BOTTOKEN
 from messages import NEWCOMMENT, NEWTHREAD
 bot = telegram.Bot(BOTTOKEN)
 #chats = ['@tietokilta','@tietokila','@tiklors']
-chats = ['96171182', '@visantensti']
+
+with open('channels.json', 'r') as fp:
+    chats = json.load(fp)
+
+def save_channels():
+    with open('channels.json', 'w') as fp:
+        json.dump(chats, fp)
+
+def start(update, context):
+    """Send a message when the command /start is issued."""
+    chats.append( update.message.chat_id )
+    save_channels()
+    update.message.reply_text('Chat registered!')
+
+def help(update, context):
+    """Send a message when the command /help is issued."""
+    update.message.reply_text('Help!')
+
+
+def tg_bot():
+    print("starting bot")
+    """Start the bot."""
+    updater = Updater(BOTTOKEN, use_context=True)
+
+    # Get the dispatcher to register handlers
+    dp = updater.dispatcher
+
+    # on different commands - answer in Telegram
+    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CommandHandler("help", help))
+
+    # Start the Bot
+    updater.start_polling()
+    updater.idle()
+
+def http_api():
+    server_address = ("0.0.0.0", 4000)
+    httpd = HTTPServer(server_address, S)
+    print(f"Starting httpd server on 0.0.0.0:4000")
+    httpd.serve_forever()
 
 class S(BaseHTTPRequestHandler):
     def _set_headers(self):
@@ -33,26 +74,37 @@ class S(BaseHTTPRequestHandler):
         self._set_headers()
 
     def do_POST(self):
+        chats = chats
+        save = False
         # Doesn't do anything with posted data
         event = self.headers.get('X-Discourse-Event')
         data = json.loads(self.rfile.read(int(self.headers.get('content-length'))))
         print(data)
+        nchats = []
         if event == 'topic_created':
             data = data['topic']
             for c in chats:
-                bot.send_message(c, NEWTHREAD.format(data['title']), parse_mode="Markdown" )
+                try:
+                    bot.send_message(c, NEWTHREAD.format(data['title']), parse_mode="Markdown" )
+                    nchats.append(c)
+                except:
+                    save = True
         elif event == 'post_created':
             data = data['post']
             for c in chats:
-                print(c)
-                bot.send_message(c, NEWCOMMENT.format(data['topic_title'], data['topic_slug'], data['topic_id']), parse_mode="Markdown")
+                try:
+                    bot.send_message(c, NEWCOMMENT.format(data['topic_title'], data['topic_slug'], data['topic_id']), parse_mode="Markdown")
+                    nchats.append(c)
+                except:
+                    save = True
+            chats = nchats
+        if save:
+            save_channels()
         self._set_headers()
         self.wfile.write(self._html("POST!"))
 
 if __name__ == "__main__":
-    server_address = ("0.0.0.0", 4000)
-    httpd = HTTPServer(server_address, S)
-    print(f"Starting httpd server on 0.0.0.0:4000")
-    httpd.serve_forever()
-    print("serv?")
+    x = threading.Thread(target=http_api)
+    x.start()
+    tg_bot()
 
