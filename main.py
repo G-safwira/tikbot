@@ -6,7 +6,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 
 from constants import BOTTOKEN
-
+from messages.py import NEWCOMMENT, NEWTHREAD
 bot = telegram.Bot(BOTTOKEN)
 chats = ['tietokilta','tietokila','tiklors']
 
@@ -39,11 +39,11 @@ class S(BaseHTTPRequestHandler):
         if event == 'topic_created':
             data = data['topic']
             for c in chats:
-                bot.send_message(c, f"""Uusi hakemus!\n{data['title']}""")
+                bot.send_message(c, NEWTHREAD.format(data['title']) )
         elif event == 'post_created':
             data = data['post']
             for c in chats:
-                bot.send_message(c, f"""Uusi viesti ketjuun {data['topic_title']}!\n\nhttps://vaalit.tietokilta.fi/t/{data['topic_slug']}/{data['topic_id']}""")
+                bot.send_message(c, NEWCOMMENT.format(data['topic_title'], data['topic_slug'], data['topic_id']))
         self._set_headers()
         self.wfile.write(self._html("POST!"))
 
