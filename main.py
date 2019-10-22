@@ -8,7 +8,8 @@ import json
 from constants import BOTTOKEN
 from messages import NEWCOMMENT, NEWTHREAD
 bot = telegram.Bot(BOTTOKEN)
-chats = ['tietokilta','tietokila','tiklors']
+#chats = ['tietokilta','tietokila','tiklors']
+chats = ['tietokila']
 
 class S(BaseHTTPRequestHandler):
     def _set_headers(self):
