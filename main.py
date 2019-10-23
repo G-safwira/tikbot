@@ -17,6 +17,7 @@ def load_chats():
 
 def save_channels(chats):
     with open('channels.json', 'w') as fp:
+        chats = list(set(chats))
         json.dump(chats, fp)
 
 def start(update, context):
