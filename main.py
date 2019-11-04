@@ -86,7 +86,7 @@ class S(BaseHTTPRequestHandler):
         nchats = []
         if event == 'topic_created':
             data = data['topic']
-            if data['title'] != "Aion hakea virkaan"
+            if data['title'] != "Aion hakea virkaan":
                 for c in chats:
                     try:
                         bot.send_message(c, NEWTHREAD.format(data['title']), parse_mode="Markdown" )
@@ -95,7 +95,7 @@ class S(BaseHTTPRequestHandler):
                         save = True
         elif event == 'post_created':
             data = data['post']
-            if data['topic_title'] != "Aion hakea virkaan"
+            if data['topic_title'] != "Aion hakea virkaan":
                 for c in chats:
                     try:
                         bot.send_message(c, NEWCOMMENT.format(data['topic_title'], data['topic_slug'], data['topic_id']), parse_mode="Markdown")
